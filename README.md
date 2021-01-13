@@ -8,6 +8,7 @@ It is possible to render a production scene with Swift.
 
 2048x858 pixels, 64 samples per pixel, 26 hours on a Google Compute Engine with
 8 CPUs and 64 GB of memory. Memory usage was around 50GB.
+This image was denoised with OpenImageDenoise.
 
 ![Moana](Images/moana.png)
 

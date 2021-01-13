@@ -1,0 +1,4 @@
+module openexr {
+        link "IlmImf"
+}
+

@@ -1,15 +1,16 @@
-struct BoundingHierarchyBuilder {
+final class BoundingHierarchyBuilder {
 
         init(primitives: [Boundable]) {
                 self.nodes = []
-                self.cachedPrimitives = primitives.map { primitive in
+                self.cachedPrimitives = primitives.enumerated().map { index, primitive in
                         let bound = primitive.worldBound()
-                        return (primitive, bound, bound.center)
+                        return (index, bound, bound.center)
                 }
+                self.primitives = primitives
                 buildHierarchy()
         }
 
-        mutating func buildHierarchy() {
+        func buildHierarchy() {
                 if cachedPrimitives.isEmpty { return }
                 nodes = []
                 let _ = build(range: 0..<cachedPrimitives.count)
@@ -18,18 +19,19 @@ struct BoundingHierarchyBuilder {
         func getBoundingHierarchy() -> BoundingHierarchy {
                 BoundingHierarchyBuilder.bhPrimitives += cachedPrimitives.count
                 BoundingHierarchyBuilder.bhNodes += nodes.count
-                return BoundingHierarchy(primitives: cachedPrimitives.map { $0.0 as! AnyObject & Intersectable },
+                return BoundingHierarchy(primitives: cachedPrimitives.map { primitives[$0.0] as! AnyObject & Intersectable
+                                                },
                                          nodes: nodes)
         }
 
-        mutating private func growNodes(counter: Int) {
+        private func growNodes(counter: Int) {
                 let missing = counter - nodes.count + 1
                 if missing > 0 {
                         nodes += Array(repeating: Node(), count: missing)
                 }
         }
 
-        mutating private func appendAndInit(offset: Int,
+        private func appendAndInit(offset: Int,
                                             bounds: Bounds3f,
                                             range: Range<Int>,
                                             counter: Int) {
@@ -43,7 +45,7 @@ struct BoundingHierarchyBuilder {
                 BoundingHierarchyBuilder.totalPrimitives += range.count
         }
 
-        mutating func build(range: Range<Int>) -> Bounds3f {
+        func build(range: Range<Int>) -> Bounds3f {
                 let counter = totalNodes
                 totalNodes += 1
                 if range.isEmpty { return Bounds3f() }
@@ -106,6 +108,7 @@ struct BoundingHierarchyBuilder {
         var totalNodes = 0
         var offsetCounter = 0
         var nodes: [Node]
-        var cachedPrimitives: [(Boundable, Bounds3f, Point)]
+        var cachedPrimitives: [(Int, Bounds3f, Point)]
+        var primitives: [Boundable]
 }
 

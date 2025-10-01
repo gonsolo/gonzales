@@ -32,3 +32,13 @@ extension Ray: CustomStringConvertible {
                 return "Ray [ o: \(origin) d: \(direction)]"
         }
 }
+
+extension Ray: Equatable {
+        static func == (lhs: Ray, rhs: Ray) -> Bool {
+                return
+                        lhs.origin == rhs.origin &&
+                        lhs.direction == rhs.direction &&
+                        lhs.inverseDirection == rhs.inverseDirection &&
+                        lhs.cameraSample == rhs.cameraSample
+        }
+}

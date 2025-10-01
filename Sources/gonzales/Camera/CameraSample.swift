@@ -8,3 +8,11 @@ struct CameraSample {
         let film: TwoRandomVariables
         let lens: TwoRandomVariables
 }
+
+extension CameraSample: Equatable {
+        static func == (lhs: CameraSample, rhs: CameraSample) -> Bool {
+                return
+                        lhs.film == rhs.film &&
+                        lhs.lens == rhs.lens
+        }
+}

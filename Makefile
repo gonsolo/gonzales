@@ -106,7 +106,7 @@ else
 	VIEWER 			= gimp
 	PBRT 			= ~/bin/pbrt
 	#LLDB 			= /usr/libexec/swift/bin/lldb
-	LLDB 			= lldb
+	LLDB 			= /usr/lib/swift/bin/lldb
 	ifeq ($(HOSTNAME), Limone)
 		SWIFT		= ~/bin/swift
 	else
@@ -279,8 +279,8 @@ format:
 codespell:
 	codespell -L inout Sources
 lldb:
-	$(LLDB) .build/release/gonzales -- $(SINGLERAY) $(SCENE)
-	#$(LLDB) .build/debug/gonzales -- $(SINGLERAY) $(SCENE)
+	#$(LLDB) .build/release/gonzales -- $(SINGLERAY) $(SCENE)
+	$(LLDB) .build/debug/gonzales -- $(SINGLERAY) $(SCENE)
 
 heaptrack:
 	heaptrack $(GONZALES_RELEASE) $(SCENE)

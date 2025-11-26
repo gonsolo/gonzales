@@ -1,0 +1,28 @@
+protocol PhaseFunction: DistributionModel, Sendable {
+        func evaluate(wo: Vector, wi: Vector) -> FloatX
+        func samplePhase(wo: Vector, sampler: inout Sampler) -> (value: FloatX, wi: Vector)
+}
+
+extension PhaseFunction {
+
+        func evaluateDistributionFunction(wo: Vector, wi: Vector, normal _: Normal = zeroNormal)
+                -> RgbSpectrum
+        {
+                let phase = evaluate(wo: wo, wi: wi)
+                let scatter = RgbSpectrum(intensity: phase)
+                return scatter
+        }
+
+        func sampleDistributionFunction(
+                wo: Vector, normal _: Normal = zeroNormal, sampler: inout Sampler
+        )
+                -> BsdfSample
+        {
+                let (value, wi) = samplePhase(wo: wo, sampler: &sampler)
+                return BsdfSample(RgbSpectrum(intensity: value), wi, value)
+        }
+
+        func evaluateProbabilityDensity(wo: Vector, wi: Vector) -> FloatX {
+                return evaluate(wo: wo, wi: wi)
+        }
+}
